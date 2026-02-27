@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hospital Management System - Admin Login</title>
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --header: #bfbfbf;
+      --panel: #d8d8d8;
+      --panel-2: #cfcfcf;
+      --text: #111;
+      --muted: #6b6b6b;
+      --danger: #e00000;
+      --shadow: 0 10px 25px rgba(0,0,0,.18);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+
+      --page-max: 460px; /* tablet/web still shows same centered phone design */
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #101828; /* optional outer background like a phone preview; change to white if you want */
+      color: var(--text);
+    }
+
+    /* Center the "phone" design on larger screens */
+    .page{
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .app{
+      width: min(100%, var(--page-max));
+      background: var(--bg);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+    }
+
+    /* Header block */
+    .header{
+      height: 30vh;
+      min-height: 180px;
+      max-height: 240px;
+      background: var(--header);
+      border-bottom-left-radius: 36px;
+      border-bottom-right-radius: 36px;
+      position: relative;
+    }
+
+    /* Menu button (top-right) */
+    .menu-btn{
+      position: absolute;
+      right: 16px;
+      top: 14px;
+      display: grid;
+      gap: 6px;
+      justify-items: center;
+      background: transparent;
+      border: 0;
+      padding: 6px 8px;
+      cursor: pointer;
+      color: var(--text);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .menu-icon{
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #2aa8d6;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 14px rgba(0,0,0,.18);
+    }
+    .menu-icon .lines{
+      width: 16px;
+      height: 10px;
+      position: relative;
+    }
+    .menu-icon .lines::before,
+    .menu-icon .lines::after,
+    .menu-icon .lines span{
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+    }
+    .menu-icon .lines::before{ top: 0; }
+    .menu-icon .lines span{ top: 4px; }
+    .menu-icon .lines::after{ bottom: 0; }
+    .menu-label{
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* Avatar circle overlapping header and content */
+    .avatar{
+      width: clamp(90px, 28vw, 120px);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: #cfd7ef;
+      position: absolute;
+      left: 50%;
+      bottom: -48px;
+      transform: translateX(-50%);
+      box-shadow: 0 10px 20px rgba(0,0,0,.12);
+    }
+
+    .content{
+      padding: 64px 18px 18px; /* top padding accounts for avatar overlap */
+    }
+
+    .title{
+      text-align: center;
+      font-size: 18px;
+      margin: 6px 0 14px;
+      font-weight: 500;
+    }
+
+    .card{
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      padding: 16px 14px 18px;
+      margin: 0 auto 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
+    }
+
+    .card h2{
+      margin: 2px 0 14px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .row{
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+    }
+
+    .row label{
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .pill-input{
+      width: 100%;
+      height: 38px;
+      border-radius: var(--radius-pill);
+      border: 0;
+      outline: none;
+      padding: 0 14px;
+      background: #bdbdbd;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.18);
+      font-size: 14px;
+    }
+
+    .help{
+      text-align: center;
+      color: var(--danger);
+      font-size: 14px;
+      margin: 10px 0 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .btn{
+      display: block;
+      width: 70%;
+      max-width: 260px;
+      margin: 0 auto;
+      height: 42px;
+      border-radius: var(--radius-pill);
+      background: #bdbdbd;
+      border: 1px solid rgba(0,0,0,.22);
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .footer{
+      background: var(--header);
+      padding: 14px 10px 16px;
+      text-align: center;
+    }
+    .footer .em{
+      color: var(--danger);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .footer .copy{
+      color: #111;
+      font-weight: 500;
+    }
+
+    /* Overlay menu (appears above content like your screenshot) */
+    .overlay{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .overlay.active{
+      pointer-events: auto;
+    }
+
+    .backdrop{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.28);
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+    .overlay.active .backdrop{ opacity: 1; }
+
+    .menu-panel{
+      position: absolute;
+      top: 64px;
+      right: 16px;
+      width: min(82%, 340px);
+      background: #e0e0e0;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 14px 14px 10px;
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+    .overlay.active .menu-panel{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .menu-list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+      font-size: 14px;
+    }
+    .menu-item{
+      color: #111;
+      text-decoration: none;
+      display: block;
+      padding: 4px 2px;
+    }
+    .menu-section{
+      margin-top: 6px;
+      color: #111;
+      font-weight: 600;
+    }
+    .submenu{
+      list-style: none;
+      padding-left: 18px;
+      margin: 6px 0 0;
+      display: grid;
+      gap: 6px;
+      color: #111;
+      font-weight: 500;
+    }
+
+    /* Tablet+ adjustments (still same design, just slightly roomier) */
+    @media (min-width: 768px){
+      .app{ border-radius: 18px; }
+      .content{ padding-left: 22px; padding-right: 22px; }
+      .row{ grid-template-columns: 90px 1fr; }
+      .title{ font-size: 19px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <main class="app" aria-label="Hospital Management System Admin Login">
+
+      <header class="header">
+        <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">
+          <div class="menu-icon" aria-hidden="true">
+            <div class="lines"><span></span></div>
+          </div>
+          <div class="menu-label">Menu</div>
+        </button>
+
+        <div class="avatar" aria-hidden="true"></div>
+      </header>
+
+      <section class="content">
+        <div class="title">Hospital Management System</div>
+
+        <section class="card" aria-label="Admin Login">
+          <h2>Admin Login</h2>
+
+          <div class="row">
+            <label for="email">Email :</label>
+            <input id="email" class="pill-input" type="email" inputmode="email" autocomplete="username" />
+          </div>
+
+          <div class="row">
+            <label for="code">Code :</label>
+            <input id="code" class="pill-input" type="password" autocomplete="current-password" />
+          </div>
+
+          <a class="help" href="#" onclick="return false;">Any Issues&nbsp; trying to login ?</a>
+
+          <button class="btn" type="button">Secure Login</button>
+        </section>
+      </section>
+
+      <footer class="footer">
+        <div class="em">Report Emergency</div>
+        <div class="copy">Copy Right Protected</div>
+      </footer>
+
+      <!-- Overlay Menu -->
+      <div class="overlay" id="menuOverlay" aria-hidden="true">
+        <div class="backdrop" id="backdrop" aria-label="Close menu"></div>
+
+        <nav class="menu-panel" aria-label="Menu">
+          <ul class="menu-list">
+            <li><a class="menu-item" href="#" onclick="return false;">Home</a></li>
+            <li><a class="menu-item" href="#" onclick="return false;">Notices</a></li>
+            <li><a class="menu-item" href="#" onclick="return false;">Contact Us</a></li>
+            <li><a class="menu-item" href="#" onclick="return false;">Support - Teams</a></li>
+
+            <li class="menu-section">Hot Lines :</li>
+            <li>
+              <ul class="submenu">
+                <li><a class="menu-item" href="#" onclick="return false;">Police Station Help Desk</a></li>
+                <li><a class="menu-item" href="#" onclick="return false;">Emergency Ambulance</a></li>
+              </ul>
+            </li>
+
+            <li class="menu-section">Health Schemes</li>
+            <li><a class="menu-item" href="#" onclick="return false;">Bihar Govt. Health&nbsp; Support Info.</a></li>
+          </ul>
+        </nav>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('menuBtn');
+      const overlay = document.getElementById('menuOverlay');
+      const backdrop = document.getElementById('backdrop');
+
+      function setOpen(isOpen){
+        overlay.classList.toggle('active', isOpen);
+        overlay.setAttribute('aria-hidden', String(!isOpen));
+        btn.setAttribute('aria-expanded', String(isOpen));
+      }
+
+      btn.addEventListener('click', () => {
+        const isOpen = overlay.classList.contains('active');
+        setOpen(!isOpen);
+      });
+
+      backdrop.addEventListener('click', () => setOpen(false));
+
+      // Optional: close menu with Esc key (web)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setOpen(false);
+      });
+    })();
+  </script>
+</body>
+</html>

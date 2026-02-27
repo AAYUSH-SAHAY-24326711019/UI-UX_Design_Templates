@@ -1,0 +1,45 @@
+Specifications of the delivered single‑file HTML template (save this for later)
+1) Goal / Output
+A single index.html file containing HTML + internal CSS + internal JS that recreates the mobile UI concept from your reference and works across desktop → tablet → mobile without separate files. UI reference
+
+2) Responsive behavior (your main requirement)
+The UI is built as a full‑page application layout:
+
+Desktop/Laptop (web browsers):
+The design covers the full viewport (full width + full height). Header and footer are full‑bleed across the page; content is centered and scales up smoothly.
+
+Tablets:
+The same design scales down automatically (no breakpoints required to “switch layouts”), keeping proportions.
+
+Mobile phones:
+The design further shrinks and fits all screen sizes, still showing the same structure and spacing.
+
+This scaling is done primarily using CSS clamp(), so sizes smoothly adapt instead of jumping.
+
+3) Layout structure (what’s on the screen)
+Top header block: gray background with rounded bottom corners.
+Menu button (top‑right): circular blue hamburger icon + “Menu” label.
+Avatar circle: centered circle that overlaps header and content area.
+Title: centered “Hospital Management System”.
+Login card: rounded gray panel with:
+“Admin Login” centered
+two rows: Email : + pill input, Code : + pill input
+red help text: “Any Issues trying to login ?”
+pill button: “Secure Login”
+Footer bar (bottom): gray full width with:
+red “Report Emergency”
+black “Copy Right Protected”
+UI reference
+4) Menu behavior (must-have interaction)
+Menu button is clickable.
+On click: a menu overlay appears above the content (not pushing content).
+Clicking the menu button again hides it.
+Clicking outside the menu (the dark backdrop) also hides it.
+Pressing ESC hides it (desktop convenience).
+5) Implementation details (so you don’t have to restate later)
+Mobile-first sizing philosophy, but desktop fills full page.
+Uses CSS variables in :root for quick edits:
+colors (header, card, inputs, menu blue, danger red)
+spacing/padding
+radii (header + card)
+shadows
